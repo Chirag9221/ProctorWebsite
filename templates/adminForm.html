@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Assessment Configuration</title>
+    <link rel="stylesheet" href="static/css/adminForm.css">
+
+    
+</head>
+<body>
+    <div class="admin-form">
+        <h2>Admin Assessment Setup</h2>
+        <form action="/adminForm" method="post">
+            <label for="testName">Assessment Name:</label>
+            <input type="text" id="testName" name="testName" placeholder="Enter the test name" required>
+
+            <label for="formLink">Microsoft Form Link:</label>
+            <input type="url" id="formLink" name="formLink" placeholder="Enter the Microsoft Form URL" required>
+
+            <!-- <label for="duration">Test Duration:</label>
+            <select id="duration" name="duration" required>
+                <option value="0.5">30 minutes (30 min)</option>
+                <option value="1">1 hour (60 min)</option>
+                <option value="1.5">1 hour 30 min (90 min)</option>
+                <option value="2">2 hours (120 min)</option>
+                <option value="2.5">2 hours 30 min (150 min)</option>
+                <option value="3">3 hours (180 min)</option>
+            </select> -->
+
+            <label for="duration">Test Duration:</label>
+            <select id="duration" name="duration" required>
+                <option value="30">30 minutes</option>
+                <option value="60">60 minutes</option>
+                <option value="90">90 minutes</option>
+                <option value="120">120 minutes</option>
+                <option value="150">150 minutes</option>
+                <option value="180">180 minutes</option>
+            </select>
+
+
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+</html>

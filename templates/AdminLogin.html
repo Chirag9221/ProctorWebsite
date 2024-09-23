@@ -1,0 +1,39 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGID Entry Form</title>
+    <link rel="stylesheet" href="static/css/AdminLogin.css">
+</head>
+<body>
+
+    <div class="form-container">
+        {% if warningdata|length > 1 %}
+            <div class="warning-message" id="warningMessage">
+                Please enter a valid SGID.
+            </div>
+        {% endif %}
+
+        <img src="/static/images/Saint-Gobain-Logo.png" alt="Saint-Gobain Logo">
+        <form action="/" method="post">
+            <label for="sgid">SGID:</label>
+            <input type="text" id="sgid" name="sgid" placeholder="Enter your SGID" required>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+
+    <script>
+        // JavaScript to remove the warning message after the animation completes
+        setTimeout(function() {
+            const warningMessage = document.getElementById('warningMessage');
+            if (warningMessage) {
+                warningMessage.style.display = 'none';
+            }
+        }, 6000); // 6 seconds for animation to complete
+    </script>
+
+</body>
+</html>
