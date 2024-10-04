@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Microsoft Form</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Enter Time for Test</h1>
+        <input type="number" id="timeInput" placeholder="Time in minutes" min="1" required>
+        <button id="startButton">Start Test</button>
+    </div>
+
+    <script>
+        document.getElementById('startButton').addEventListener('click', function() {
+            const time = document.getElementById('timeInput').value;
+            if (time) {
+                // Convert time to milliseconds
+                const timeInMs = time * 60 * 1000;
+
+                // Replace 'YOUR_MICROSOFT_FORM_URL' with your actual form URL
+                const formUrl = 'https://forms.office.com/e/PviVjEaFp4';
+                
+                // Open the form in fullscreen mode
+                openFormFullscreen(formUrl, timeInMs);
+            } else {
+                alert('Please enter a valid time in minutes.');
+            }
+        });
+
+        function openFormFullscreen(url, duration) {
+            const formWindow = window.open(url, '_blank');
+
+            // Wait for the new window to load
+            formWindow.onload = function() {
+                const el = formWindow.document.documentElement;
+                const rfs = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullscreen;
+
+                // Request fullscreen
+                rfs.call(el);
+
+                // Set a timeout to exit fullscreen after the specified duration
+                setTimeout(() => {
+                    if (formWindow.document.exitFullscreen) {
+                        formWindow.document.exitFullscreen();
+                    } else if (formWindow.document.webkitExitFullscreen) {
+                        formWindow.document.webkitExitFullscreen();
+                    } else if (formWindow.document.mozCancelFullScreen) {
+                        formWindow.document.mozCancelFullScreen();
+                    }
+                    formWindow.close(); // Close the form window after time is up
+                }, duration);
+            };
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!-- FORM LINK -->
+<!-- https://forms.office.com/e/PviVjEaFp4 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiring Website</title>
+    <link rel="stylesheet" href="static/css/index.css">
+    <!-- <script>
+        let tabSwitchCount = 0;
+        let testStarted = false;
+
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden && testStarted) {
+                tabSwitchCount++;
+                if (tabSwitchCount === 2) {
+                    alert("You have switched tabs 2 times. The form is being submitted.");
+                    submitForm();
+                } else {
+                    alert(`Warning: You have switched the tab ${tabSwitchCount} time(s). After 2 switches, the form will be submitted.`);
+                }
+            }
+        });
+
+        document.addEventListener('fullscreenchange', function() {
+            if (testStarted && !document.fullscreenElement) {
+                alert("You have exited fullscreen. The form is being submitted.");
+                submitForm();
+            }
+        });
+
+        function submitForm() {
+            window.location.href = "/submission-success";
+        }
+
+        function startTest() {
+            testStarted = true;
+            document.getElementById('instructions').style.display = 'none';
+            document.getElementById('formContainer').style.display = 'block';
+            enterFullscreen();
+        }
+
+        function enterFullscreen() {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            }
+        }
+    </script> -->
+</head>
+<body>
+
+    <div class="navbar">
+        <img src="/static/images/Saint-Gobain-Black-Logo.png" alt="Company Logo">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/AdminLogin">AdminLogin</a></li>
+        </ul>
+    </div>
+
+    <h1 style="color: #003366;">Welcome to the Saint Gobains Online Test Portal!</h1>
+
+    <div id="instructions" class="instructions">
+        <h2 style="color: #003366;">Instructions:</h2>
+        <ul>
+            <li>Do not switch tabs during the test.</li>
+            <li>Ensure you stay in fullscreen mode throughout the test. Exiting fullscreen will result in your test being submitted automatically.</li>
+        </ul>
+        
+        <button id="startButton" onclick="startTest()">Start Test</button>
+    
+        
+    </div>
+
+    <div id="formContainer">
+        <p>Please fill out the form below:</p>
+        <embed src="{{ rowlist[3] }}" width="100%" height="600px">
+    </div>
+
+
+    <script>
+        let exitFullScreenCount = 0; // Counter for fullscreen exits
+        const startButton = document.getElementById('start-button');
+        const formContainer = document.getElementById('form-container');
+        const iframe = document.getElementById('microsoftForm');
+        
+        // Function to launch the form in fullscreen mode
+        function openFullScreen() {
+            formContainer.style.display = 'block'; // Show form container
+            document.documentElement.requestFullscreen(); // Open in full-screen mode
+        }
+    
+        // Event listener for the start button
+        startButton.addEventListener('click', openFullScreen);
+    
+        // Event listener to detect when fullscreen mode is exited
+        document.addEventListener('fullscreenchange', function() {
+            if (!document.fullscreenElement) {
+                exitFullScreenCount++;
+                
+                if (exitFullScreenCount === 1) {
+                    // Warn the user on the first exit and ask them to go fullscreen again
+                    alert("Warning: You have exited fullscreen mode. Please click OK to return to fullscreen mode.");
+                    document.documentElement.requestFullscreen(); // Re-enter fullscreen
+                } else if (exitFullScreenCount === 2) {
+                    // After the second exit, automatically submit the form via the Python route
+                    alert("You have exited fullscreen mode twice. The form will be submitted now.");
+                    autosubmit(); // Call autosubmit function
+                }
+            }
+        });
+    
+        // Function to submit the form by redirecting to Flask Python code
+        function autosubmit() {
+            fetch('/autosubmit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: "Exited fullscreen twice, submitting form." }) // Optional data
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Form submitted successfully!');
+                } else {
+                    alert('Error submitting form.');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('There was an error submitting the form.');
+            });
+        }
+    
+        // Event listener to detect when the Escape key is pressed
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                alert("Escape key pressed! The form will be submitted now.");
+                
+                // Simulate form submission inside the iframe
+                const iframeDocument = iframe.contentWindow.document;
+                const submitButton = iframeDocument.querySelector('button[data-automation-id="submitButton"]');
+    
+                if (submitButton) {
+                    submitButton.click();
+                    alert("Form submitted successfully!");
+                } else {
+                    console.log("Submit button not found in the iframe.");
+                }
+            }
+        });
+    </script>
+    
+
+
+
+    
+    
+    
+<!-- 
+    <script>
+        const startButton = document.getElementById('start-button');
+        const formContainer = document.getElementById('form-container');
+        const iframe = document.getElementById('microsoftForm');
+     
+        // Function to launch the form in fullscreen mode
+        function openFullScreen() {
+          formContainer.style.display = 'block'; // Show form container
+          document.documentElement.requestFullscreen(); // Open in full-screen mode
+        }
+     
+        // Event listener for the start button
+        startButton.addEventListener('click', openFullScreen);
+     
+        // Event listener to detect when the Escape key is pressed
+        document.addEventListener('keydown', function (event) {
+          if (event.key === "Escape") {
+            // Step 1: Alert that the Escape key is pressed
+            alert("Escape key pressed! The form will be submitted now.");
+     
+            // Step 2: Simulate form submission
+            const iframeDocument = iframe.contentWindow.document;
+     
+            // Find the submit button by its unique data-automation-id
+            const submitButton = iframeDocument.querySelector('button[data-automation-id="submitButton"]');
+     
+            // Simulate a click on the submit button if found
+            if (submitButton) {
+              submitButton.click();
+              // Step 3: Alert after form is submitted
+              alert("Form submitted successfully!");
+            } else {
+              console.log("Submit button not found in the iframe.");
+            }
+          }
+        });
+     
+    </script> -->
+</body>
+</html>
