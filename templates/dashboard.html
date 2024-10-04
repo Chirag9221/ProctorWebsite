@@ -72,8 +72,7 @@
 
     /* Card styling */
     .card, .new-card {
-      display: flex;
-      flex-wrap: wrap;
+      position: relative; /* Added for delete button positioning */
       border: 2px solid black;
       border-radius: 10px;
       background-color: white;
@@ -83,38 +82,63 @@
       width: 250px;
       height: 12rem;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      position: relative;
       transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
     }
-
+ 
     .card:hover, .new-card:hover {
       transform: scale(1.05);
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
     }
-
+ 
     .card-body {
       padding: 5px 0;
     }
-
+ 
     .card-title {
       font-size: 1.3rem;
       margin-bottom: 5px;
       font-weight: bold;
       color: #00448A;
+      word-wrap: break-word;       /* Allows long words to break and wrap to the next line */
+  overflow-wrap: break-word;   /* Ensures text wraps even in older browsers */
+  white-space: normal;         /* Ensures text wraps to the next line */
+  max-width: 100%;             /* Prevents content from extending beyond container */
+ 
     }
-
+ 
     .card-subtitle {
       font-size: 1rem;
       margin-bottom: 5px;
       color: #219CDC;
+      word-wrap: break-word;       /* Allows long words to break and wrap to the next line */
+      overflow-wrap: break-word;   /* Ensures text wraps even in older browsers */
+      white-space: normal;         /* Ensures text wraps to the next line */
+      max-width: 100%;             /* Prevents content from extending beyond container */
     }
-
+ 
     .card-text {
       font-size: 0.9rem;
       color: #555;
       margin-bottom: 5px;
     }
-
+ 
+    /* Delete button styling */
+    .delete-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 2.0rem;
+      color: #888;
+    }
+ 
+    .delete-btn:hover {
+      color: #ff0026;
+    }
+ 
+    /* New Card button styling */
     .new-card {
       display: flex;
       justify-content: center;
@@ -124,30 +148,16 @@
       cursor: pointer;
       text-align: center;
     }
-
+ 
     .new-card:hover {
       background-color: #e2e6ea;
     }
-
+ 
     .new-card h5 {
       color: #007bff;
       font-size: 1.3rem;
     }
-
-    .delete-btn {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      font-size: 1.5rem;
-      color: #888;
-    }
-
-    .delete-btn:hover {
-      color: #ff0026;
-    }
+ 
   </style>
 </head>
 <body>
@@ -178,7 +188,7 @@
             <button type="submit" style="border: none; background: none; width: 100%; text-align: left;">
               <div class="card-body">
                 <h5 class="card-title">{{ row[2] }}</h5>
-                <h6 class="card-subtitle">{{ row[3] }}</h6>
+                <h6 class="card-subtitle">Click Here</h6>
                 <p class="card-text">{{ row[4] }} minutes</p>
               </div>
             </button>

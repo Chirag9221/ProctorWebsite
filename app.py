@@ -55,60 +55,85 @@ def home():
     else:
         print(rowlist)
         return render_template('index.html',rowlist=rowlist)
+    
 
 @app.route('/proctor', methods=['POST'])
 def proctor():
     if request.method == 'POST':
-        duration = int(request.form.get('duration')) * 60  # Convert duration to seconds
+        print('start time:-',time.ctime())
+        duration_in_minutes = int(request.form.get('duration'))  # Get duration in minutes
+        print('duration_in_mins:-',duration_in_minutes)
+        duration_in_seconds = duration_in_minutes * 60  # Convert minutes to seconds
         microsoftForm = request.form.get('microsoftForm')
         print('Form link:', microsoftForm)
-        
+    
     try:
-        # Initialize WebDriver with Chrome options for Kiosk Mode
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--kiosk")  # Open Chrome in Kiosk Mode
-        
-        driver = webdriver.Chrome(options=chrome_options)
-        
-        # Open the Microsoft Form URL in Kiosk Mode
+        options = webdriver.ChromeOptions()
+        options.add_argument("--kiosk")  # Kiosk mode (Fullscreen)
+        driver = webdriver.Chrome(options=options)
+
+        # Open the Microsoft Form URL
         driver.get(microsoftForm)
-        time.sleep(3)  # Allow the page to load
-        
-        # Count of Escape key presses (if needed)
-        count_of_Esc = 0
-        
-        # Function to submit the form and exit fullscreen after duration ends
-        def end_test():
-            try:
-                submit_button = WebDriverWait(driver, 180).until(
-                    EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Submit')]"))
-                )
-                submit_button.click()
-                print("Form submitted.")
-            except Exception as e:
-                print(f"An error occurred while submitting: {e}")
-            finally:
-                driver.quit()  # Close the browser after submission
-        
-        # Set the timer to end the test after the specified duration
-        test_timer = Timer(duration, end_test)
-        test_timer.start()  # Start the timer
-        
-        # Monitor form submission or other activities
+        time.sleep(1)
+
+        # Function to enter fullscreen mode using JavaScript
+        def enter_fullscreen():
+            driver.fullscreen_window()
+
+        # Call the function to enter fullscreen initially
+        enter_fullscreen()
+
+        # Wait for the submit button to be clickable
         submit_button = WebDriverWait(driver, 180).until(
             EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Submit')]"))
         )
+
+        # Function to unblock keys and close fullscreen after submission
+        def end_test():
+            print("Ending the test...")
+            submit_button.click()  # Submit the form
+            driver.execute_script('alert("Test duration ended. Submitting the form.");')
+            time.sleep(5)
+            print(time.ctime())
+            driver.quit()  # Close the WebDriver
         
-        # After the form is submitted manually, exit fullscreen and close the browser
-        submit_button.click()
-        driver.quit()  # Close the browser after manual submission
+        # Function to suppress the Windows key press
+        def block_windows_key(event):
+            if event.name == 'windows':
+                return False  # Suppress the key press
+
+        # Block the ESC and ALT+TAB keys during the test
+        keyboard.block_key('esc')
+        print("keyboard.block_key('esc')")
+        # keyboard.block_key('esc')
+        keyboard.block_key('alt')
+        print("keyboard.block_key('alt')")
+        keyboard.block_key('tab')
+        print("keyboard.block_key('tab')")
+        keyboard.block_key('f11')
+        print("keyboard.block_key('f11')")
+        # keyboard.block_key('fn')  # Note: fn key blocking may not work on all systems
+        # print("keyboard.block_key('fn')")
+        keyboard.block_key('delete')
+        print("keyboard.block_key('delete')")
+
+        # Set a timer for the duration of the test (in seconds)
+        test_timer = Timer(duration_in_seconds, end_test)
+        test_timer.start()
+
+        # Optional: Wait to observe the result after submission
+        time.sleep(duration_in_seconds + 5)  # Adding a few seconds buffer to observe results
+
+        print(time.ctime())
+        
+        # Close the WebDriver after submission if needed
+        driver.quit()
 
         return jsonify({'success': True, 'message': 'Form has been submitted successfully.'})
 
     except Exception as e:
         print(f'An error occurred: {e}')
         return jsonify({'success': False, 'message': 'Error submitting form.'}), 500
-
 
 
 @app.route('/adminForm', methods=['GET', 'POST'])
